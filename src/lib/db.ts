@@ -12,7 +12,7 @@ delete (config as any).connectionString;
 // Programmatically force SSL settings on the pool
 config.ssl = { rejectUnauthorized: false };
 
-const pool = new pg.Pool(config);
+const pool = new pg.Pool(config as any);
 const adapter = new PrismaPg(pool, { schema: 'viking_atlas' });
 
 const globalForPrisma = globalThis as unknown as {
