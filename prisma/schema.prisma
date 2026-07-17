@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Location {
+  id              Int        @id @default(autoincrement())
+  name            String
+  type            String     // 'city', 'battle_site', 'sacred_site', 'mythical_realm'
+  description     String?
+  latitude        Float?
+  longitude       Float?
+  isMythological  Boolean    @default(false)
+  entitiesCapital Entity[]   @relation("CapitalLocation")
+  entitiesBurial  Entity[]   @relation("BurialLocation")
+  events          Event[]
+}
+
+model Entity {
+  id               Int            @id @default(autoincrement())
+  name             String
+  title            String?
+  type             String         // 'historical_king', 'mythological_god', 'explorer', 'monster'
+  description      String?
+  reignStart       Int?
+  reignEnd         Int?
+  birthYear        Int?
+  deathYear        Int?
+  deathCause       String?
+  capitalId        Int?
+  capital          Location?      @relation("CapitalLocation", fields: [capitalId], references: [id])
+  burialId         Int?
+  burial           Location?      @relation("BurialLocation", fields: [burialId], references: [id])
+  isMythological   Boolean        @default(false)
+  profileImageUrl  String?
+  relationshipsFrom Relationship[] @relation("RelationshipFrom")
+  relationshipsTo   Relationship[] @relation("RelationshipTo")
+  routes           Route[]
+}
+
+model Relationship {
+  id              Int     @id @default(autoincrement())
+  fromEntityId    Int
+  fromEntity      Entity  @relation("RelationshipFrom", fields: [fromEntityId], references: [id], onDelete: Cascade)
+  toEntityId      Int
+  toEntity        Entity  @relation("RelationshipTo", fields: [toEntityId], references: [id], onDelete: Cascade)
+  relationType    String  // 'parent_of', 'spouse_of', 'successor_of', 'allied_with', 'fought_against'
+  description     String?
+  isMythological  Boolean @default(false)
+}
+
+model Event {
+  id             Int       @id @default(autoincrement())
+  title          String
+  type           String    // 'battle', 'coronation', 'discovery', 'religious_ritual'
+  year           Int
+  description    String?
+  locationId     Int?
+  location       Location? @relation(fields: [locationId], references: [id])
+  isMythological Boolean   @default(false)
+  mediaUrl       String?
+  threeDModelId  String?
+}
+
+model Route {
+  id             Int     @id @default(autoincrement())
+  name           String
+  explorerId     Int?
+  explorer       Entity? @relation(fields: [explorerId], references: [id])
+  startYear      Int?
+  endYear        Int?
+  pathPoints     String  // Semicolon separated list of "lat,lon;lat,lon" or JSON array
+  isMythological Boolean @default(false)
+  description    String?
+}
