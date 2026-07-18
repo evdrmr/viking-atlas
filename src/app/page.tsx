@@ -92,16 +92,26 @@ export default function Home() {
 
   // Helper to resolve generated scene artwork for current event
   const getEventImage = (title: string) => {
-    if (title.includes('Lindisfarne')) return '/viking-atlas/event_lindisfarne.jpg';
-    if (title.includes('Greenland')) return '/viking-atlas/event_greenland.jpg';
-    if (title.includes('Baldr')) return '/viking-atlas/yggdrasil_cosmology.jpg';
-    return '/viking-atlas/viking_bg.jpg'; // Aurora Fjord background
+    const t = title.toLowerCase();
+    if (t.includes('lindisfarne')) return '/viking-atlas/event_lindisfarne.jpg';
+    if (t.includes('greenland')) return '/viking-atlas/event_greenland.jpg';
+    if (t.includes('asgard')) return '/viking-atlas/map_asgard.jpg';
+    if (t.includes('jotunheim')) return '/viking-atlas/map_jotunheim.jpg';
+    if (t.includes('muspelheim')) return '/viking-atlas/map_muspelheim.jpg';
+    if (t.includes('baldr') || t.includes('yggdrasil') || t.includes('nine worlds')) return '/viking-atlas/yggdrasil_cosmology.jpg';
+    return '/viking-atlas/viking_parchment_map.jpg'; // weathered regional voyager map
   };
 
   // Helper to resolve generated portrait artwork for active character profile
   const getEntityPortrait = (name: string) => {
-    if (name.includes('Odin')) return '/viking-atlas/portrait_odin.jpg';
-    if (name.includes('Thor')) return '/viking-atlas/portrait_thor.jpg';
+    const n = name.toLowerCase();
+    if (n.includes('odin')) return '/viking-atlas/portrait_odin.jpg';
+    if (n.includes('thor')) return '/viking-atlas/portrait_thor.jpg';
+    if (n.includes('loki')) return '/viking-atlas/char_loki.jpg';
+    if (n.includes('fairhair')) return '/viking-atlas/char_harald_fairhair.jpg';
+    if (n.includes('saint olaf') || n.includes('olaf haraldsson')) return '/viking-atlas/char_saint_olaf.jpg';
+    if (n.includes('leif erikson')) return '/viking-atlas/char_leif_erikson.jpg';
+    if (n.includes('erik the red')) return '/viking-atlas/event_greenland.jpg';
     return null; // fallback to avatar icon
   };
 
@@ -110,7 +120,22 @@ export default function Home() {
     : null;
 
   return (
-    <div className="viking-bg-wrapper min-h-screen relative overflow-hidden flex flex-col justify-between">
+    <div className="min-h-screen relative overflow-hidden flex flex-col justify-between">
+      {/* Cinematic Background Crossfade */}
+      <div className="absolute inset-0 z-0 bg-[#06080c]">
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
+          style={{ backgroundImage: `url(/viking-atlas/viking_bg_parchment.jpg)` }}
+        />
+        <div 
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
+            mythMode ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ backgroundImage: `url(/viking-atlas/myth_bg_roots.jpg)` }}
+        />
+        <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+      </div>
+
       {/* 3D WebGL space stardust backdrop */}
       <CinematicCanvas
         mythMode={mythMode}
@@ -131,7 +156,7 @@ export default function Home() {
               Viking Atlas
             </h1>
             <p className="text-[9px] text-foreground/50 tracking-widest font-medieval uppercase mt-1">
-              Interactive 3D Sagas and Deities Chronicles
+              Interactive Cinematic Sagas and Deities Chronicles
             </p>
           </div>
 
