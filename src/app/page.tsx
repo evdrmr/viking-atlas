@@ -92,16 +92,16 @@ export default function Home() {
 
   // Helper to resolve generated scene artwork for current event
   const getEventImage = (title: string) => {
-    if (title.includes('Lindisfarne')) return '/event_lindisfarne.jpg';
-    if (title.includes('Greenland')) return '/event_greenland.jpg';
-    if (title.includes('Baldr')) return '/yggdrasil_cosmology.jpg';
-    return '/viking_bg.jpg'; // Aurora Fjord background
+    if (title.includes('Lindisfarne')) return '/viking-atlas/event_lindisfarne.jpg';
+    if (title.includes('Greenland')) return '/viking-atlas/event_greenland.jpg';
+    if (title.includes('Baldr')) return '/viking-atlas/yggdrasil_cosmology.jpg';
+    return '/viking-atlas/viking_bg.jpg'; // Aurora Fjord background
   };
 
   // Helper to resolve generated portrait artwork for active character profile
   const getEntityPortrait = (name: string) => {
-    if (name.includes('Odin')) return '/portrait_odin.jpg';
-    if (name.includes('Thor')) return '/portrait_thor.jpg';
+    if (name.includes('Odin')) return '/viking-atlas/portrait_odin.jpg';
+    if (name.includes('Thor')) return '/viking-atlas/portrait_thor.jpg';
     return null; // fallback to avatar icon
   };
 

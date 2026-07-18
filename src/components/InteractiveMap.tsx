@@ -153,7 +153,7 @@ export default function InteractiveMap({
         ref={mapContainerRef}
         className="relative flex-grow border border-white/5 rounded-lg overflow-hidden bg-[#0a0c10] shadow-inner"
         style={{
-          backgroundImage: `url(${mythMode ? '/yggdrasil_cosmology.jpg' : '/viking_parchment_map.jpg'})`,
+          backgroundImage: `url(/viking-atlas/${mythMode ? 'yggdrasil_cosmology.jpg' : 'viking_parchment_map.jpg'})`,
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

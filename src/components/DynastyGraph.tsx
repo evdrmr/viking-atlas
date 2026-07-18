@@ -65,16 +65,18 @@ export default function DynastyGraph({
     const filteredNodes = data.nodes.filter((n) => (mythMode ? true : !n.isMythological));
     const filteredNodeIds = new Set(filteredNodes.map((n) => n.id));
 
-    const filteredLinks = data.links
+    // Clone arrays to prevent D3 from mutating the React state directly
+    const nodesCopy = filteredNodes.map((n) => ({ ...n }));
+    const linksCopy = data.links
       .filter((l) => {
-        const sId = typeof l.source === 'object' ? l.source.id : l.source;
-        const tId = typeof l.target === 'object' ? l.target.id : l.target;
+        const sId = typeof l.source === 'object' ? (l.source as any).id : l.source;
+        const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
         return filteredNodeIds.has(sId) && filteredNodeIds.has(tId);
       })
       .map((l) => ({
         ...l,
-        source: typeof l.source === 'object' ? l.source.id : l.source,
-        target: typeof l.target === 'object' ? l.target.id : l.target,
+        source: typeof l.source === 'object' ? (l.source as any).id : l.source,
+        target: typeof l.target === 'object' ? (l.target as any).id : l.target,
       })) as RelationshipLink[];
 
     const width = 800;
@@ -115,11 +117,11 @@ export default function DynastyGraph({
 
     // Setup Force Simulation
     const simulation = d3
-      .forceSimulation<EntityNode>(filteredNodes)
+      .forceSimulation<EntityNode>(nodesCopy)
       .force(
         'link',
         d3
-          .forceLink<EntityNode, RelationshipLink>(filteredLinks)
+          .forceLink<EntityNode, RelationshipLink>(linksCopy)
           .id((d) => d.id)
           .distance(100)
       )
@@ -131,7 +133,7 @@ export default function DynastyGraph({
     const link = gContainer
       .append('g')
       .selectAll('line')
-      .data(filteredLinks)
+      .data(linksCopy)
       .enter()
       .append('line')
       .attr('stroke', (d) => {
@@ -148,7 +150,7 @@ export default function DynastyGraph({
     const node = gContainer
       .append('g')
       .selectAll('g')
-      .data(filteredNodes)
+      .data(nodesCopy)
       .enter()
       .append('g')
       .attr('class', 'cursor-pointer')
