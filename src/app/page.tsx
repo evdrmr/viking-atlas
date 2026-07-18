@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Compass, Sparkles, BookOpen, ArrowLeft, ArrowRight } from 'lucide-react';
-import InteractiveMap from '@/components/InteractiveMap';
+import dynamic from 'next/dynamic';
+import { Sparkles, BookOpen, ArrowLeft, ArrowRight, Compass } from 'lucide-react';
 import Timeline from '@/components/Timeline';
 import DynastyGraph from '@/components/DynastyGraph';
+
+// Import CinematicCanvas dynamically to bypass Next.js SSR window reference issues
+const CinematicCanvas = dynamic(() => import('@/components/CinematicCanvas'), { ssr: false });
 
 const STORIES = [
   {
@@ -88,54 +91,74 @@ export default function Home() {
     }
   };
 
+  const activeStoryLocation = storyIndex !== null ? STORIES[storyIndex].location : null;
+
   return (
-    <div className="viking-bg-wrapper min-h-screen flex flex-col justify-start">
-      <main className="w-full flex-grow flex flex-col p-4 md:p-6 gap-6 max-w-7xl mx-auto">
-        {/* App Header */}
-        <header className="flex flex-col sm:flex-row justify-between items-center border-b border-white/10 pb-4 gap-4">
+    <div className="viking-bg-wrapper min-h-screen relative overflow-hidden flex flex-col justify-between">
+      {/* 3D WebGL Cinematic Background Scene */}
+      <CinematicCanvas
+        mythMode={mythMode}
+        activeYear={activeYear}
+        selectedEntity={selectedEntity}
+        activeStoryLocation={activeStoryLocation}
+      />
+
+      {/* Foreground HUD Interface Layer */}
+      <div className="relative z-10 flex flex-col justify-between min-h-screen p-4 md:p-6 gap-6 pointer-events-none w-full max-w-7xl mx-auto">
+        
+        {/* HUD Header */}
+        <header className="flex flex-col sm:flex-row justify-between items-center border-b border-white/5 pb-4 gap-4 pointer-events-auto">
           <div className="text-center sm:text-left">
             <h1 className={`text-4xl font-bold tracking-widest font-decorative uppercase ${
               mythMode ? 'text-rune glow-rune' : 'text-gold glow-gold'
             }`}>
               Viking Atlas
             </h1>
-            <p className="text-[10px] text-foreground/50 tracking-widest font-medieval uppercase mt-1">
-              Journey of Myth, Sagas, and Historical Kings (793 – 1066 AD)
+            <p className="text-[9px] text-foreground/50 tracking-widest font-medieval uppercase mt-1">
+              Interactive 3D Journey of Myth and Historical Succession
             </p>
           </div>
 
-          {/* Myth Overlay Toggle */}
-          <button
-            onClick={handleToggleMythMode}
-            className={`flex items-center gap-2.5 px-5 py-2.5 rounded-full border transition-all duration-300 ${
-              mythMode
-                ? 'bg-rune/15 border-rune text-rune shadow-[0_0_15px_rgba(56,189,248,0.3)] font-bold'
-                : 'bg-gold/5 border-gold/40 text-gold hover:border-gold shadow-[0_0_8px_rgba(212,175,55,0.1)]'
-            } font-medieval text-xs uppercase tracking-wider cursor-pointer`}
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>{mythMode ? 'Myth Mode: Active' : 'Pagan Myth Overlay'}</span>
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Active Mode indicator badge */}
+            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded border text-[10px] uppercase font-medieval tracking-wider ${
+              mythMode ? 'border-rune/30 text-rune bg-rune/5' : 'border-gold/30 text-gold bg-gold/5'
+            }`}>
+              <Compass className="w-3.5 h-3.5" />
+              <span>{mythMode ? 'Realm: Yggdrasil' : 'Realm: Midgard'}</span>
+            </div>
+
+            {/* Myth Toggle Button */}
+            <button
+              onClick={handleToggleMythMode}
+              className={`flex items-center gap-2 px-5 py-2 rounded-full border transition-all duration-300 ${
+                mythMode
+                  ? 'bg-rune/15 border-rune text-rune shadow-[0_0_15px_rgba(56,189,248,0.3)] font-bold'
+                  : 'bg-gold/5 border-gold/40 text-gold hover:border-gold shadow-[0_0_8px_rgba(212,175,55,0.1)]'
+              } font-medieval text-xs uppercase tracking-wider cursor-pointer`}
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>{mythMode ? 'God Overlay: ON' : 'Pagan Myth Mode'}</span>
+            </button>
+          </div>
         </header>
 
-        {/* Main Grid Workspace */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow">
-          {/* Left Panel: Map */}
-          <div className="lg:col-span-2 flex flex-col gap-6">
-            <InteractiveMap
+        {/* HUD Main Grid Panel overlays */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch flex-grow my-4">
+          
+          {/* Left HUD: Dynasty/Succession Node Graph */}
+          <div className="lg:col-span-2 flex flex-col pointer-events-auto h-[480px] lg:h-auto">
+            <DynastyGraph
               mythMode={mythMode}
-              activeYear={activeYear}
               selectedEntity={selectedEntity}
-              onSelectLocation={(locName) => {
-                const match = STORIES.find((s) => s.location === locName);
-                if (match) setSelectedEntity(match.entity);
-              }}
+              onSelectEntity={(name) => setSelectedEntity(name)}
             />
           </div>
 
-          {/* Right Panel: Story Controller & Dynasty Graph */}
-          <div className="flex flex-col gap-6">
-            {/* Story Controller Panel */}
+          {/* Right HUD: Saga Chronicle & Narrative logger */}
+          <div className="flex flex-col gap-6 pointer-events-auto">
+            
+            {/* Saga Guided Panel */}
             <div className={`rounded-xl p-5 flex flex-col justify-between h-[230px] border shadow-2xl relative overflow-hidden transition-all duration-300 ${
               mythMode ? 'norsk-panel-rune' : 'norsk-panel'
             }`}>
@@ -144,14 +167,14 @@ export default function Home() {
                 <h3 className={`font-medieval font-bold tracking-widest uppercase text-[10px] ${
                   mythMode ? 'text-rune' : 'text-gold'
                 }`}>
-                  Saga Chronicles (Guided Mode)
+                  Saga Chronicle
                 </h3>
               </div>
 
               {storyIndex === null ? (
                 <div className="flex flex-col justify-center items-center text-center flex-grow py-3">
                   <p className="text-xs text-foreground/75 leading-relaxed max-w-[280px] font-sans">
-                    Embark on a curated chronological tour through the major events of the Viking expansion.
+                    Begin the epic journey across the seas of Midgard or down the roots of the cosmic tree.
                   </p>
                   <button
                     onClick={() => handleSelectStory(0)}
@@ -159,7 +182,7 @@ export default function Home() {
                       mythMode ? 'norsk-btn-rune' : 'norsk-btn'
                     }`}
                   >
-                    Begin Saga
+                    Launch Journey
                   </button>
                 </div>
               ) : (
@@ -170,7 +193,7 @@ export default function Home() {
                     }`}>
                       {STORIES[storyIndex].title}
                     </h4>
-                    <p className="text-xs text-foreground/85 leading-relaxed line-clamp-4 font-sans">
+                    <p className="text-xs text-foreground/80 leading-relaxed line-clamp-4 font-sans">
                       {STORIES[storyIndex].description}
                     </p>
                   </div>
@@ -202,19 +225,32 @@ export default function Home() {
               )}
             </div>
 
-            {/* D3 Dynasty Graph Panel */}
-            <div className="flex-grow min-h-[300px]">
-              <DynastyGraph
-                mythMode={mythMode}
-                selectedEntity={selectedEntity}
-                onSelectEntity={(name) => setSelectedEntity(name)}
-              />
+            {/* Inset Information Help Box */}
+            <div className={`rounded-xl p-5 flex-grow border shadow-2xl flex flex-col justify-center relative overflow-hidden transition-all duration-300 ${
+              mythMode ? 'norsk-panel-rune' : 'norsk-panel'
+            }`}>
+              <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-3">
+                <Compass className={`w-4 h-4 ${mythMode ? 'text-rune' : 'text-gold'}`} />
+                <h3 className={`font-medieval font-bold tracking-widest uppercase text-[10px] ${
+                  mythMode ? 'text-rune' : 'text-gold'
+                }`}>
+                  Interactive HUD Instructions
+                </h3>
+              </div>
+              <p className="text-xs text-foreground/75 leading-relaxed font-sans mb-3">
+                Watch the background 3D camera fly through space automatically as you navigate the sagas or timelines.
+              </p>
+              <ul className="text-[10px] text-foreground/60 space-y-1.5 font-medieval uppercase tracking-wide">
+                <li>• Timeline scrolls chronologically</li>
+                <li>• Nodes represent ancestral links</li>
+                <li>• Pagan Mode orbits Yggdrasil Worlds</li>
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Bottom Timeline Section */}
-        <footer className="w-full">
+        {/* HUD Footer: snaps to active timeline */}
+        <footer className="w-full pointer-events-auto">
           <Timeline
             mythMode={mythMode}
             activeYear={activeYear}
@@ -235,7 +271,7 @@ export default function Home() {
             }}
           />
         </footer>
-      </main>
+      </div>
     </div>
   );
 }
