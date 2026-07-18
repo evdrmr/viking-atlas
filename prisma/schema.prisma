@@ -17,6 +17,7 @@ model Location {
   latitude        Float?
   longitude       Float?
   isMythological  Boolean    @default(false)
+  mediaUrl        String?
   entitiesCapital Entity[]   @relation("CapitalLocation")
   entitiesBurial  Entity[]   @relation("BurialLocation")
   events          Event[]
