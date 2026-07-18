@@ -72,15 +72,19 @@ export default function Timeline({
   };
 
   return (
-    <div className="w-full bg-background border border-card/40 rounded-lg p-4 shadow-2xl flex flex-col gap-4">
+    <div className={`w-full flex flex-col gap-4 p-5 rounded-xl border transition-all duration-300 ${
+      mythMode ? 'norsk-panel-rune' : 'norsk-panel'
+    }`}>
       {/* Timeline Controls */}
-      <div className="flex justify-between items-center border-b border-card/30 pb-2">
+      <div className="flex justify-between items-center border-b border-white/5 pb-2">
         <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-gold" />
-          <h2 className="text-lg font-bold tracking-wide uppercase">Historical & Mythological Timeline</h2>
+          <Calendar className={`w-5 h-5 ${mythMode ? 'text-rune glow-rune' : 'text-gold glow-gold'}`} />
+          <h2 className={`text-lg font-bold tracking-wider font-decorative uppercase ${mythMode ? 'text-rune' : 'text-gold'}`}>
+            Chronological Saga Timeline
+          </h2>
         </div>
-        <div className="text-xs text-foreground/50">
-          Scroll horizontally <span className="font-mono text-gold">← Shift + Scroll →</span> or drag
+        <div className="text-[10px] text-foreground/40 font-medieval uppercase tracking-wider hidden md:block">
+          Scroll horizontally <span className="text-gold">← Shift + Scroll →</span> or click
         </div>
       </div>
 
@@ -93,8 +97,8 @@ export default function Timeline({
         {visibleEvents.map((ev) => {
           const isActive = ev.year === activeYear;
           const cardBorderColor = ev.isMythological
-            ? 'border-rune/40 hover:border-rune'
-            : 'border-gold/30 hover:border-gold';
+            ? 'border-rune/20 hover:border-rune/60'
+            : 'border-gold/20 hover:border-gold/60';
           
           let icon = <Landmark className="w-4 h-4 text-gold" />;
           let typeColor = 'text-gold';
@@ -115,20 +119,20 @@ export default function Timeline({
               key={`event-${ev.id}`}
               id={`event-card-${ev.id}`}
               onClick={() => handleEventClick(ev)}
-              className={`flex-none w-72 h-44 bg-card/40 backdrop-blur-sm border rounded-lg p-4 cursor-pointer transition-all duration-300 flex flex-col justify-between select-none scroll-snap-align-center ${cardBorderColor} ${
+              className={`flex-none w-72 h-44 bg-[#05070a]/60 backdrop-blur-md border rounded-lg p-4 cursor-pointer transition-all duration-300 flex flex-col justify-between select-none scroll-snap-align-center ${cardBorderColor} ${
                 isActive
                   ? ev.isMythological
-                    ? 'scale-102 bg-card/80 border-rune border-glow-rune'
-                    : 'scale-102 bg-card/80 border-gold border-glow-gold'
+                    ? 'scale-[1.02] bg-[#09101b]/95 border-rune/80 shadow-[0_0_15px_rgba(56,189,248,0.25)]'
+                    : 'scale-[1.02] bg-[#120f09]/95 border-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.2)]'
                   : ''
               }`}
             >
               {/* Year & Type Header */}
               <div className="flex justify-between items-center">
-                <span className="font-mono text-lg font-bold tracking-wider text-foreground">
+                <span className="font-medieval text-base font-bold tracking-wider text-foreground">
                   {ev.year < 0 ? `${Math.abs(ev.year)} BCE` : `${ev.year} AD`}
                 </span>
-                <span className={`text-[10px] uppercase font-bold tracking-widest flex items-center gap-1 ${typeColor}`}>
+                <span className={`text-[9px] uppercase font-bold tracking-widest flex items-center gap-1.5 ${typeColor}`}>
                   {icon}
                   {ev.type.replace('_', ' ')}
                 </span>
@@ -136,18 +140,18 @@ export default function Timeline({
 
               {/* Title & Location */}
               <div className="my-2">
-                <h4 className="font-serif font-bold text-sm tracking-wide text-foreground line-clamp-1">
+                <h4 className="font-decorative font-bold text-sm tracking-wide text-foreground line-clamp-1">
                   {ev.title}
                 </h4>
                 {ev.location && (
-                  <span className="text-[10px] text-foreground/50 tracking-wide">
+                  <span className="text-[10px] text-foreground/45 tracking-wider font-medieval uppercase">
                     📍 {ev.location.name}
                   </span>
                 )}
               </div>
 
               {/* Short Description */}
-              <p className="text-xs text-foreground/75 leading-relaxed line-clamp-2">
+              <p className="text-xs text-foreground/70 leading-relaxed line-clamp-2 font-sans">
                 {ev.description}
               </p>
             </div>
@@ -156,10 +160,10 @@ export default function Timeline({
       </div>
 
       {/* Progress timeline bar */}
-      <div className="relative w-full h-1 bg-card/40 rounded">
+      <div className="relative w-full h-1 bg-white/5 rounded">
         <div
           className={`absolute top-0 bottom-0 left-0 transition-all duration-500 rounded ${
-            mythMode ? 'bg-rune' : 'bg-gold'
+            mythMode ? 'bg-rune shadow-[0_0_5px_#38bdf8]' : 'bg-gold shadow-[0_0_5px_#d4af37]'
           }`}
           style={{
             width: `${
@@ -168,7 +172,7 @@ export default function Timeline({
                     visibleEvents.length) *
                   100
                 : 0
-            }%`,
+          }%`,
           }}
         ></div>
       </div>

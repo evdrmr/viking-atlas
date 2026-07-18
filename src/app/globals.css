@@ -1,12 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=MedievalSharp&family=Uncial+Antiqua&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #0B0E14;
-  --foreground: #E5EAEF;
-  --card-bg: #151D2A;
-  --accent-gold: #C8A261;
-  --accent-rune: #4D9FFF;
-  --accent-battle: #C23B22;
+  --background: #06080c;
+  --foreground: #e4ebf0;
+  --card-bg: rgba(10, 15, 23, 0.7);
+  --accent-gold: #d4af37;
+  --accent-rune: #38bdf8;
+  --accent-battle: #ef4444;
+  --panel-border: rgba(212, 175, 55, 0.25);
+  --panel-border-rune: rgba(56, 189, 248, 0.3);
 }
 
 @theme inline {
@@ -19,53 +22,155 @@
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: 'Cinzel', 'Garamond', Georgia, serif;
   overflow-x: hidden;
 }
 
+/* Background image overlay and parallax */
+.viking-bg-wrapper {
+  background-image: linear-gradient(to bottom, rgba(6, 8, 12, 0.8) 0%, rgba(6, 8, 12, 0.95) 100%), url('/viking_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B0E14;
+  background: #06080c;
 }
 ::-webkit-scrollbar-thumb {
-  background: #151D2A;
-  border: 2px solid #0B0E14;
+  background: rgba(212, 175, 55, 0.3);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C8A261;
+  background: var(--accent-gold);
 }
 
-/* GSAP timeline horizontal scroll style */
-.timeline-scroll-container {
-  display: flex;
-  flex-wrap: nowrap;
-  will-change: transform;
+/* Glassmorphism Panels */
+.norsk-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Runic glow effect classes */
+.norsk-panel:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.05);
+}
+
+.norsk-panel-rune {
+  background: rgba(8, 12, 20, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--panel-border-rune);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(56, 189, 248, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.norsk-panel-rune:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.95), 0 0 15px rgba(56, 189, 248, 0.1);
+}
+
+/* Custom interactive buttons */
+.norsk-btn {
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: var(--accent-gold);
+  font-family: 'MedievalSharp', serif;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.norsk-btn:hover:not(:disabled) {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  transform: translateY(-1px);
+}
+
+.norsk-btn-rune {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-rune);
+  font-family: 'MedievalSharp', serif;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.norsk-btn-rune:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-rune);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Typography styles */
+.font-decorative {
+  font-family: 'Cinzel Decorative', Georgia, serif;
+}
+
+.font-uncial {
+  font-family: 'Uncial Antiqua', Georgia, serif;
+}
+
+.font-medieval {
+  font-family: 'MedievalSharp', cursive, sans-serif;
+}
+
+/* Custom glow text */
 .glow-gold {
-  text-shadow: 0 0 8px rgba(200, 162, 97, 0.6);
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.4);
 }
+
 .glow-rune {
-  text-shadow: 0 0 10px rgba(77, 159, 255, 0.8);
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.9), 0 0 22px rgba(56, 189, 248, 0.5);
 }
+
 .glow-battle {
-  text-shadow: 0 0 8px rgba(194, 59, 34, 0.7);
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
 }
 
-.border-glow-gold {
-  box-shadow: 0 0 12px rgba(200, 162, 97, 0.25);
-  border-color: #C8A261;
+/* SVG animations */
+@keyframes runicPulse {
+  0% { opacity: 0.25; stroke-width: 1; }
+  50% { opacity: 0.7; stroke-width: 1.8; filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.8)); }
+  100% { opacity: 0.25; stroke-width: 1; }
 }
 
-.border-glow-rune {
-  box-shadow: 0 0 12px rgba(77, 159, 255, 0.3);
-  border-color: #4D9FFF;
+.animate-runic-pulse {
+  animation: runicPulse 4s infinite ease-in-out;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s infinite ease-in-out;
+}
+
+/* Runic border decoration */
+.runic-border {
+  position: relative;
+}
+.runic-border::before {
+  content: "";
+  position: absolute;
+  top: 4px; left: 4px; right: 4px; bottom: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  pointer-events: none;
 }
