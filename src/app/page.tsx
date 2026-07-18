@@ -25,14 +25,14 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const eventsRes = await fetch('/api/events');
+        const eventsRes = await fetch('/viking-atlas/api/events');
         const eventsData = await eventsRes.json();
         
         // Sort chronologically
         const sortedEvents = (eventsData || []).sort((a: any, b: any) => a.year - b.year);
         setEvents(sortedEvents);
 
-        const dynastyRes = await fetch('/api/dynasty');
+        const dynastyRes = await fetch('/viking-atlas/api/dynasty');
         const dynastyData = await dynastyRes.json();
         setEntities(dynastyData.nodes || []);
       } catch (err) {

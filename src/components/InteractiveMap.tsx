@@ -63,7 +63,7 @@ export default function InteractiveMap({
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch('/api/geography');
+        const res = await fetch('/viking-atlas/api/geography');
         const data = await res.json();
         setLocations(data.locations || []);
         setRoutes(data.routes || []);

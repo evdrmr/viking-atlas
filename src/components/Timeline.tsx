@@ -35,7 +35,7 @@ export default function Timeline({
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const res = await fetch('/api/events');
+        const res = await fetch('/viking-atlas/api/events');
         const data = await res.json();
         setEvents(data || []);
       } catch (err) {

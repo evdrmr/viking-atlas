@@ -48,7 +48,7 @@ export default function DynastyGraph({
   useEffect(() => {
     async function fetchDynasty() {
       try {
-        const res = await fetch('/api/dynasty');
+        const res = await fetch('/viking-atlas/api/dynasty');
         const json = await res.json();
         setData(json);
       } catch (err) {
