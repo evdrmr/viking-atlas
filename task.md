@@ -1,0 +1,7 @@
+- [x] Retire 3D space particles and camera flight meshes in `CinematicCanvas.tsx`.
+- [x] Implement ambient, floating ember particles that fade colors between campfire amber and runic blue.
+- [x] Add dynamic background crossfade layers inside `page.tsx` for `viking_bg_parchment.jpg` and `myth_bg_roots.jpg`.
+- [x] Integrate custom generated assets for characters and realms into database-linked image resolvers.
+- [x] Add `mediaUrl` field to `Location` table schema to support image paths directly on geographical hubs.
+- [x] Generate Midgard coastline scenery map (`map_midgard.jpg`), Canute the Great portrait (`char_canute.jpg`), and legendary Ragnar Lothbrok portrait (`char_ragnar.jpg`).
+- [x] Push schema change, compile production build, and run update script to populate Supabase tables.
