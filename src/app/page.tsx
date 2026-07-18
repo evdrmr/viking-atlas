@@ -91,25 +91,35 @@ export default function Home() {
   };
 
   // Helper to resolve generated scene artwork for current event
-  const getEventImage = (title: string) => {
-    const t = title.toLowerCase();
+  const getEventImage = (event: any) => {
+    if (!event) return '/viking-atlas/viking_parchment_map.jpg';
+    if (event.mediaUrl) return event.mediaUrl;
+
+    const t = event.title.toLowerCase();
     if (t.includes('lindisfarne')) return '/viking-atlas/event_lindisfarne.jpg';
     if (t.includes('greenland')) return '/viking-atlas/event_greenland.jpg';
     if (t.includes('asgard')) return '/viking-atlas/map_asgard.jpg';
     if (t.includes('jotunheim')) return '/viking-atlas/map_jotunheim.jpg';
     if (t.includes('muspelheim')) return '/viking-atlas/map_muspelheim.jpg';
+    if (t.includes('uppsala')) return '/viking-atlas/event_uppsala.jpg';
     if (t.includes('baldr') || t.includes('yggdrasil') || t.includes('nine worlds')) return '/viking-atlas/yggdrasil_cosmology.jpg';
     return '/viking-atlas/viking_parchment_map.jpg'; // weathered regional voyager map
   };
 
   // Helper to resolve generated portrait artwork for active character profile
-  const getEntityPortrait = (name: string) => {
-    const n = name.toLowerCase();
+  const getEntityPortrait = (entity: any) => {
+    if (!entity) return null;
+    if (entity.profileImageUrl) return entity.profileImageUrl;
+
+    const n = entity.name.toLowerCase();
     if (n.includes('odin')) return '/viking-atlas/portrait_odin.jpg';
     if (n.includes('thor')) return '/viking-atlas/portrait_thor.jpg';
     if (n.includes('loki')) return '/viking-atlas/char_loki.jpg';
+    if (n.includes('freyja')) return '/viking-atlas/char_freyja.jpg';
+    if (n.includes('surtr')) return '/viking-atlas/char_surtr.jpg';
     if (n.includes('fairhair')) return '/viking-atlas/char_harald_fairhair.jpg';
     if (n.includes('saint olaf') || n.includes('olaf haraldsson')) return '/viking-atlas/char_saint_olaf.jpg';
+    if (n.includes('hardrada') || n.includes('harald hardrada')) return '/viking-atlas/char_harald_hardrada.jpg';
     if (n.includes('leif erikson')) return '/viking-atlas/char_leif_erikson.jpg';
     if (n.includes('erik the red')) return '/viking-atlas/event_greenland.jpg';
     return null; // fallback to avatar icon
@@ -206,7 +216,7 @@ export default function Home() {
                 {/* Visual Scene Artwork Background */}
                 <div 
                   className="absolute inset-0 bg-cover bg-center transition-all duration-500"
-                  style={{ backgroundImage: `url(${getEventImage(events[storyIndex].title)})` }}
+                  style={{ backgroundImage: `url(${getEventImage(events[storyIndex])})` }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-[#06080c] via-transparent to-black/35" />
                 </div>
@@ -265,10 +275,10 @@ export default function Home() {
                 mythMode ? 'norsk-panel-rune border-rune/30' : 'norsk-panel border-gold/30'
               }`}>
                 {/* Character Portrait Background (If available) */}
-                {getEntityPortrait(selectedEntityProfile.name) && (
+                {getEntityPortrait(selectedEntityProfile) && (
                   <div 
                     className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity hover:opacity-40 transition-all duration-300"
-                    style={{ backgroundImage: `url(${getEntityPortrait(selectedEntityProfile.name)})` }}
+                    style={{ backgroundImage: `url(${getEntityPortrait(selectedEntityProfile)})` }}
                   />
                 )}
                 
