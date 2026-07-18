@@ -22,7 +22,7 @@ viking-atlas/
 │   │   └── page.tsx    # App entry (StoryController & main dashboard layout)
 │   ├── components/
 │   │   ├── DynastyGraph.tsx   # Interactive D3 force-directed tree
-│   │   ├── InteractiveMap.tsx   # SVG regional vector projection & route lines
+│   │   ├── CinematicCanvas.tsx # 3D WebGL cosmos and regional map rendering engine
 │   │   └── Timeline.tsx       # Snapping GSAP chronological slider
 │   └── lib/
 │       └── db.ts       # Prisma Pg Client adapter setup
@@ -89,17 +89,17 @@ Returns map markers (cities, battle sites, holy nodes) and exploration route pat
 Coordinates global reactivity. Holds:
 *   `activeYear` (numeric): Filters events, maps active nodes, and shifts routes.
 *   `isMythMode` (boolean): Switches between the physical map/dynasty and the runic mythological cosmos.
-*   `selectedNodeId` (string): Zooms the dynastic tree focus onto a specific character.
+*   `selectedEntity` (string): Highlights focused characters.
 
 ### `Timeline`
 *   Renders a horizontal container. GSAP handles smooth translations as users drag the slider.
 *   Highlights the closest event corresponding to `activeYear`.
 
-### `InteractiveMap`
-*   Renders customized SVG map outlines of Norway, Sweden, Denmark, British Isles, Iceland, Greenland, and North America.
-*   Projects latitude and longitude coordinates into the SVG coordinate space.
-*   Toggles a mythological layer when `isMythMode` is active (rendering runic circles and Asgard).
+### `CinematicCanvas`
+*   Renders a 3D WebGL context utilizing Three.js and GSAP camera flight path interpolation.
+*   Contains 3D extrusions representing regional landmasses and a 3D tree layout representing the Nine Worlds of Yggdrasil.
+*   Triggers smooth flying camera animations to zoom, pan, and focus close-ups on locations and worlds when sagas change.
 
 ### `DynastyGraph`
 *   Initializes a D3 simulation with force link, many-body charge, and center positioning.
-*   Binds click triggers to update `selectedNodeId` and focus family cards.
+*   Binds click triggers to update `selectedEntity` and focus family cards.

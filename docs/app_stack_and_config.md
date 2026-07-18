@@ -10,14 +10,15 @@ This document details the architectural stack, system configurations, and enviro
 *   **Next.js (v16.2.10, App Router):** Framework for routing, server component data fetching, and API endpoints.
 *   **React (v19.2.4) & TypeScript:** Core application logic and component structure.
 *   **Tailwind CSS (v4.0.0):** Rapid, utility-first styling utilizing a custom "Dark Norse" color palette.
-*   **GSAP (GreenSock Animation Platform v3.15.0):** Drives smooth scroll-snapping, entry transitions, and card expansions.
+*   **Three.js (v0.170.0+):** Drives the 3D WebGL engine rendering Yggdrasil and the extruded landmass maps.
+*   **GSAP (GreenSock Animation Platform v3.15.0):** Drives smooth camera flight animations, transitions, and scroll triggers.
 *   **D3.js (v7.9.0):** Orchestrates the force-directed dynamic layout for the interactive dynastic/mythological trees.
-*   **Custom SVG Maps:** A high-performance vector projection of the North Atlantic and Scandinavian regions, enabling customizable route rendering without heavy mapping library overhead.
+*   **Tailwind CSS (v4.0.0):** Rapid, utility-first styling utilizing a custom "Dark Norse" color palette.
 
 ### Database & ORM
 *   **PostgreSQL (Hosted on Supabase):** Production relational database.
 *   **Prisma Client & Prisma ORM (v7.8.0):** Type-safe query builder, coupled with `@prisma/adapter-pg` to enable PostgreSQL connection capability on edge/server runtimes.
-*   **pg (node-postgres v8.22.0) & pg-connection-string:** Underpinning client pool configuration.
+*   **pg (node-postgres v8.22.0), @types/three, & pg-connection-string:** Underpinning client pool and runtime configurations.
 
 ### Server & Hosting
 *   **Ubuntu Server Host:** Hosts the Node/Next.js application.
